@@ -1,5 +1,5 @@
 {
-    "name": "[vendor]/[package]",
+    "name": "[[vendor]]/[[package]]",
     "description": "Package Description",
     "license": "MIT",
     "authors": [
@@ -12,10 +12,10 @@
     },
     "autoload": {
         "files": [
-            "src/[Package]/Support/helpers.php"
+            "src/app/Support/helpers.php"
         ],
         "psr-4": {
-            "nsv\\nsp\\": "src/Package/"
+            "[[namespace_vendor]]\\[[namespace_package]]\\": "src/"
         }
     },
     "minimum-stability": "stable"

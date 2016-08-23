@@ -10,6 +10,9 @@
         }
     ],
     "autoload": {
+        "files": [
+            "src/Packager/Support/helpers.php"
+        ],
         "psr-4": {
             "CleaniqueCoders\\Packager\\": "src/Packager/"
         }

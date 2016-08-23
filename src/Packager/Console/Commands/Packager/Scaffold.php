@@ -24,7 +24,7 @@ class Scaffold extends Command
 
     protected $packages = 'packages/';
 
-    protected $skeleton = 'stub/scaffold/';
+    protected $skeleton = '/stub/scaffold/';
 
     /**
      * @var File
@@ -63,7 +63,7 @@ class Scaffold extends Command
     public function handle()
     {
         $this->packages = base_path() . '/' . $this->packages;
-        $scaffold_stub = app_path() . '/Console/Commands/Packager/' . $this->skeleton;
+        $scaffold_stub = __DIR__ . $this->skeleton;
 
         $vendor = studly_case($this->argument('vendor'));
         $package = studly_case($this->argument('package'));

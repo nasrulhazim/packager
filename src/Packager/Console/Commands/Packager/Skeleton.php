@@ -25,6 +25,18 @@ class Skeleton extends Command
 
     protected $skeleton = 'stub/skel/';
 
+    protected $path;
+
+    protected $package_path;
+
+    protected $package;
+
+    protected $vendor;
+
+    protected $replace;
+
+    protected $replaceWith;
+
     /**
      * @var File
      */
@@ -44,8 +56,32 @@ class Skeleton extends Command
      */
     public function handle()
     {
-        // update the packages directory path
         $this->makeSkeleton();
+    }
+
+    private function makeSkeleton()
+    {
+        $this->info('Creating package...');
+        $this->line('');
+
+        // configure path & variables
+        $this->makeConfigure();
+
+        // clone stub/skel
+        $this->makeClone();
+
+        // update composer
+        $this->makeComposer();
+
+        // Rename Service Provider
+        $this->makeServiceProvider();
+
+        // create readme.md
+        $this->makeReadMe();
+
+        // Done
+        $this->line("");
+        $this->info('Creating package for ' . $this->argument('vendor') . '/' . $this->argument('package') . ' is done.');
     }
 
     private function makeDirectory($path)
@@ -56,78 +92,103 @@ class Skeleton extends Command
         } 
     }
 
-    private function makeSkeleton()
+    private function makeReplace($value)
     {
+        return str_replace($this->replace, $this->replaceWith, $value);
+    }
+
+    private function makeConfigure()
+    {
+        $this->comment('Configuring package...');
+
+        // create main repository if not exist
         $this->packages = base_path() . '/' . $this->packages;
         $this->makeDirectory($this->packages);
         
-        $vendor = studly_case($this->argument('vendor'));
-        $package = studly_case($this->argument('package'));
+        $vendor = str_repo_vendor($this->argument('vendor')); // receive slug name
+        $package = str_repo_package($this->argument('package')); // receive slug name
 
-        $vendor_path = $this->packages . $this->argument('vendor') . '/';
-        $package_path = $vendor_path . $this->argument('package') . '/';
+        $vendor_path = $this->packages . $vendor . '/';
+        $package_path = $vendor_path . $package . '/';
 
-        if($this->file->exists($package_path)) {
+        $class_vendor = str_class_vendor($this->argument('vendor'));
+        $class_package = str_class_vendor($this->argument('package'));
+
+        $namespace_vendor = str_namespace($this->argument('vendor'));
+        $namespace_package = str_namespace($this->argument('package'));
+
+        $this->replace = [
+            '[[vendor]]',
+            '[[package]]',
+            '[[namespace_vendor]]',
+            '[[namespace_package]]',
+            '[[class_vendor]]',
+            '[[class_package]]',
+        ];
+
+        $this->replaceWith = [
+            $vendor,
+            $package,
+            $namespace_vendor,
+            $namespace_package,
+            $class_vendor,
+            $class_package
+        ];
+        
+        $this->vendor = $vendor;
+        $this->package = $package;
+        $this->package_path = $package_path;
+        
+        if($this->file->exists($this->package_path)) {
             $this->error('Package already exist. Please choose another package name.');
+            exit();
         }
+    }
 
-        $this->file->copyDirectory(__DIR__ . '/stub/skel/', $package_path);
-        $this->info('Creating package...');
-        $this->line("");
+    private function makeClone()
+    {
+        $this->comment("Cloning skeleton...");
+        $this->file->copyDirectory(__DIR__ . '/stub/skel/', $this->package_path);
+    }
 
-        // update composer
-        $composer_path = $package_path . 'composer.json';
-        $composer = $this->file->get($composer_path);
-
-        $composer = str_replace(
-            [
-                '[vendor]/[package]',
-                '[Package]',
-                'nsv','nsp'
-            ],[
-                $this->argument('vendor') . '/' . $this->argument('package'),
-                $package,
-                $this->argument('vendor'), $this->argument('package')
-            ],$composer);
-
-        $this->file->put($composer_path, $composer);
+    private function makeComposer()
+    {
         $this->comment('Updating Composer...');
 
-        // Rename Service Provider
-        $provider_path = $package_path . 'src/Providers/'.studly_case($package).'ServiceProvider.php';
-        $this->file->move($package_path . 'src/Providers/PackageServiceProvider.php', $provider_path);
+        $composer_path = $this->package_path . 'composer.json';
+        $composer = $this->file->get($composer_path);
+
+        $composer = $this->makeReplace($composer);
+
+        $this->file->put($composer_path, $composer); 
+    }
+
+    private function makeServiceProvider()
+    {
         $this->comment('Updating Service Provider...');
 
+        // get package provider new name
+        $provider_path = $this->package_path . 'src/app/Providers/'.str_class_package($this->package).'ServiceProvider.php';
+
+        // rename the file
+        $this->file->move($this->package_path . 'src/app/Providers/PackageServiceProvider.php', $provider_path);
+        
         $provider = $this->file->get($provider_path);
 
-        $provider = str_replace([
-            'Vendor',
-            'Package',
-            'package'
-            ],
-            [
-                studly_case($vendor),
-                studly_case($package),
-                strtolower($package) 
-            ],$provider);
-        $this->file->put($provider_path, $provider);
+        $provider = $this->makeReplace($provider);
 
-        $readme_path = $package_path . 'README.md';
+        $this->file->put($provider_path, $provider);
+    }
+
+    private function makeReadMe()
+    {
+        $this->comment('Updating README.md...');
+
+        $readme_path = $this->package_path . 'README.md';
         $readme = $this->file->get($readme_path);
 
-        $readme = str_replace(
-            [
-                'Vendor',
-                'Package'
-            ],[
-                $vendor, 
-                $package,
-            ],$readme);
+        $readme = $this->makeReplace($readme);
 
         $this->file->put($readme_path, $readme);
-
-        $this->comment('Updating README.md...');
-        $this->line("");
-        $this->info('Creating package for ' . $vendor . '/' . $package . ' is done.');
     }
 }
