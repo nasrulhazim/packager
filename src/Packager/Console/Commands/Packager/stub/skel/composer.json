@@ -1,0 +1,22 @@
+{
+    "name": "[vendor]/[package]",
+    "description": "Package Description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "author name",
+            "email": "author email"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "files": [
+            "src/[Package]/Support/helpers.php"
+        ],
+        "psr-4": {
+            "nsv\\nsp\\": "src/Package/"
+        }
+    },
+    "minimum-stability": "stable"
+}

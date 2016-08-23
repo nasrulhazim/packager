@@ -1,0 +1,3 @@
+<?php
+
+/* Routes for package */

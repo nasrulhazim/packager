@@ -1,0 +1,18 @@
+{
+    "name": "cleaniquecoders/packager",
+    "description": "This package to help developers to create packages easily.",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nasrul Hazim",
+            "email": "nasrulhazim.m@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CleaniqueCoders\\Packager\\": "src/Packager/"
+        }
+    },
+    "minimum-stability": "stable"
+}
