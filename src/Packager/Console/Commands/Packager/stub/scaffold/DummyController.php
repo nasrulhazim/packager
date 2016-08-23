@@ -1,14 +1,14 @@
 <?php
 
-namespace Vendor\Package\Controllers;
+namespace [[namespace_vendor]]\[[namespace_package]]\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Vendor\Package\Models\Dummy;
+use [[namespace_vendor]]\[[namespace_package]]\Models\[[name_model]];
 
-class DummiesController extends Controller
+class [[name_controller]]Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class DummiesController extends Controller
      */
     public function index()
     {
-        $dummies = Dummy::orderby('created_at','desc')->paginate(5);
-        return view('package::dummies.index',compact('dummies'));
+        $[[var_plural]] = [[name_model]]::orderby('created_at','desc')->paginate(5);
+        return view('[[package]]::[[var_plural]].index',compact('[[var_plural]]'));
     }
 
     /**
@@ -28,7 +28,7 @@ class DummiesController extends Controller
      */
     public function create()
     {
-        return view('package::dummies.create');
+        return view('[[package]]::[[var_plural]].create');
     }
 
     /**
@@ -39,8 +39,8 @@ class DummiesController extends Controller
      */
     public function store(Request $request)
     {
-        Dummy::create($request->input());
-        return redirect('/dummies');
+        [[name_model]]::create($request->input());
+        return redirect('/[[var_plural]]');
     }
 
     /**
@@ -51,8 +51,8 @@ class DummiesController extends Controller
      */
     public function show($id)
     {
-        $dummy = Dummy::find($id);
-        return view('package::dummies.show',compact('dummy'));
+        $[[var_singular]] = [[name_model]]::find($id);
+        return view('[[package]]::[[var_plural]].show',compact('[[var_singular]]'));
     }
 
     /**
@@ -63,8 +63,8 @@ class DummiesController extends Controller
      */
     public function edit($id)
     {
-        $dummy = Dummy::find($id);
-        return view('package::dummies.edit', compact('dummy'));
+        $[[var_singular]] = [[name_model]]::find($id);
+        return view('[[package]]::[[var_plural]].edit', compact('[[var_singular]]'));
     }
 
     /**
@@ -76,8 +76,8 @@ class DummiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dummy = Dummy::where('id', $id)->update($request->except(['_token','_method','submit']));
-        return redirect('/dummies');
+        $[[var_singular]] = [[name_model]]::where('id', $id)->update($request->except(['_token','_method','submit']));
+        return redirect('/[[var_plural]]');
     }
 
     /**
@@ -88,7 +88,7 @@ class DummiesController extends Controller
      */
     public function destroy($id)
     {
-        Dummy::destroy($id);
-        return redirect('/dummies');
+        [[name_model]]::destroy($id);
+        return redirect('/[[var_plural]]');
     }
 }

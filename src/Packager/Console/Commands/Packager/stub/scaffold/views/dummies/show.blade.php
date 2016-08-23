@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Dummy Details')
+@section('title', '[[name_model]] Details')
 
 @section('content')
-	<h3>{{ $dummy->name }}</h3>
+	<h3>{{ $[[var_singular]]->name }}</h3>
 @endsection

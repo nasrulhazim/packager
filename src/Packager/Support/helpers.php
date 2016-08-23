@@ -48,3 +48,31 @@ if(!function_exists('str_var_plural'))
 		return str_plural(strtolower($value));
 	}
 }
+
+if(!function_exists('str_model')) 
+{
+	function str_model($value) {
+		return studly_case(str_singular($value));
+	}
+}
+
+if(!function_exists('str_controller')) 
+{
+	function str_controller($value) {
+		return studly_case(str_plural($value));
+	}
+}
+
+if(!function_exists('str_migration')) 
+{
+	function str_migration($value) {
+		return snake_case(str_plural($value));
+	}
+}
+
+if(!function_exists('str_seeds')) 
+{
+	function str_seeds($value) {
+		return studly_case(str_plural($value));
+	}
+}

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Dummy List')
+@section('title', '[[name_model]] List')
 
 @section('content')
-	<a href="{{ url('/dummies/create') }}" class="btn btn-success pull-right">
+	<a href="{{ url('/[[var_plural]]/create') }}" class="btn btn-success pull-right">
 		<span class="fa fa-plus" aria-hidden="true"></span>
 	</a>
 	<div class="pull-right">
-		{{ $dummies->links() }}
+		{{ $[[var_plural]]->links() }}
 	</div>
 	<table class="table table-condensed table-hover">
 		<thead>
@@ -18,19 +18,19 @@
 		</thead>
 		<tbody>
 			{{-- comment here --}}
-			@forelse($dummies as $dummy)
+			@forelse($[[var_plural]] as $[[var_singular]])
 			<tr>
-				<td>{{ $dummy->name }}</td>
+				<td>{{ $[[var_singular]]->name }}</td>
 				<td>
-					<a href="{{ url('/dummies/'.$dummy->id) }}" class="btn btn-primary btn-sm">
+					<a href="{{ url('/[[var_plural]]/'.$[[var_singular]]->id) }}" class="btn btn-primary btn-sm">
 						<span class="fa fa-search" aria-hidden="true"></span>
 					</a>
 
-					<a href="{{ url('/dummies/'.$dummy->id.'/edit') }}" class="btn btn-warning btn-sm">
+					<a href="{{ url('/[[var_plural]]/'.$[[var_singular]]->id.'/edit') }}" class="btn btn-warning btn-sm">
 						<span class="fa fa-pencil" aria-hidden="true"></span>
 					</a>
 
-					<a href="{{ url('/dummies/'.$dummy->id) }}" class="btn btn-danger btn-sm" 
+					<a href="{{ url('/[[var_plural]]/'.$[[var_singular]]->id) }}" class="btn btn-danger btn-sm" 
 					data-method="delete" 
 					data-token="{{csrf_token()}}" 
 					data-confirm="Are you sure?">
@@ -41,13 +41,13 @@
 			</tr>
 			@empty
 			<tr>
-				<td colspan="2">No dummies available</td>
+				<td colspan="2">No [[var_plural]] available</td>
 			</tr>
 			@endforelse
 		</tbody>
 	</table>
 	<div class="pull-right">
-		{{ $dummies->links() }}
+		{{ $[[var_plural]]->links() }}
 	</div>
 @endsection
 
